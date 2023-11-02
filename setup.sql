@@ -1,9 +1,10 @@
-CREATE DATABASE Dragons_Den;
-\c Dragons_Den;
+DROP DATABASE IF EXISTS dragons_den;
+CREATE DATABASE dragons_den;
+\c dragons_den;
 CREATE TABLE users (
 user_id INT PRIMARY KEY,
 username VARCHAR(20),
-password hashed_password VARCHAR(60)
+password VARCHAR(60)
 );
 CREATE TABLE content (
 content_id INT PRIMARY KEY,
