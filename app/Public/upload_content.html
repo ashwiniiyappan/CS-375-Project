@@ -10,9 +10,11 @@
             Choose Content to Upload
         </div>
         <div style = "margin: auto; padding-top: 10px;">
-            <button id = "browse_files" style = "font-size: 50px">
-                Browse Computer Files
-            </button>
+            <form action="/api" method="post" enctype="multipart/form-data">
+                <label for="file">File</label>
+                <input id="file" name="file" type="file" />
+                <button>Upload</button>
+              </form>
         </div>
         <div id = "currently_uploading"> <!--Align to the right of browse files button-->>
 
