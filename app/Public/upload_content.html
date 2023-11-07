@@ -13,7 +13,11 @@
             <form action="/api" method="post" enctype="multipart/form-data">
                 <label for="file">File</label>
                 <input id="file" name="file" type="file" />
-                <button>Upload</button>
+                <div style = "position: absolute; bottom: 10%; left: 45%;">
+                    <button id = "upload_button" style = "font-size: 60px;">
+                        Upload
+                    </button>
+                </div>
               </form>
         </div>
         <div id = "currently_uploading"> <!--Align to the right of browse files button-->>
@@ -21,11 +25,6 @@
         </div>
         <div id = "current_content_title" style = "float: right; margin-right: 10%;"> <!--Align under currently uploading preview-->
             <input type = "text" id = "current_title" placeholder = "Current Title">
-        </div>
-        <div style = "position: absolute; bottom: 10%; left: 45%;">
-            <button id = "upload_button" style = "font-size: 60px;">
-                Upload
-            </button>
         </div>
     </body>
 </html>
