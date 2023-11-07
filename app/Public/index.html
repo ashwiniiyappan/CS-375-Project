@@ -5,9 +5,11 @@
 </head>
 <body>
   <div style = "padding: 10px;">
-    <button id = "sign_in">
-      Sign In/Sign up
-    </button>
+    <a href = "sign_in.html">
+      <button id = "sign_in">
+        Sign In/Sign up
+      </button>
+    </a>
   </div>
   <div>
     <input type = "text" id = "search" style = "float: right;" placeholder = "Search">
@@ -16,10 +18,4 @@
 
   </div>
 </body>
-<script>
-  sign_in_button = document.getElementById("sign_in");
-  sign_in_button.addEventListener("Click", () => {
-    document.location.href = "localhost:3000/sign_in.html";
-  });
-</script>
 </html>
