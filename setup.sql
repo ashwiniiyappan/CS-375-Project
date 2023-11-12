@@ -2,7 +2,7 @@ DROP DATABASE IF EXISTS dragons_den;
 CREATE DATABASE dragons_den;
 \c dragons_den;
 CREATE TABLE users (
-user_id INT PRIMARY KEY,
+user_id SERIAL PRIMARY KEY,
 username VARCHAR(20),
 password VARCHAR(60)
 );
