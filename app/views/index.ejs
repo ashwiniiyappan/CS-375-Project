@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Dragon's Den</title>
+</head>
+<body>
+  <div style = "padding: 10px;">
+    <% if (typeof testUser == "undefined") { %>
+      <a href = "sign_in.html">
+        <button id = "sign_in">Sign in/Create Account</button>
+      </a>
+    <% } else { %>
+        <a href = "profile_page.html">
+            <button id = "signed_in"><%= testUser.username%></button>
+        </a>
+    <% } %>
+  </div>
+  <div>
+    <form style = "display: flex; float: right;">
+        <input type = "text" id = "search_bar" placeholder = "Search">
+        <button id = "search_button">Search</button>
+    </form>
+  </div>
+  <div id = "video_list">
+    <!--Get the table of media, list media in descending order of views, list 1 video per row. Pull thumbnail, pull title, pull user-->
+  </div>
+</body>
+</html>
