@@ -36,29 +36,26 @@ app.post("/api", (req, res) => {
           return res.status(500).send(err);
       }
 
-      res.status(200).json({ message: "File uploaded successfully." });
+      pool.query(
+        "INSERT INTO content (content_type, content_file, view_count, likes, dislikes) VALUES ($1, $2, $3, $4, $5) RETURNING content_id",
+        ['file', uploadPath, 0, 0, 0]
+      )
+        .then((result) => {
+          let contentId = result.rows[0].content_id;
+  
+          // File information saved to the database
+          // Redirect to the profile page after successful upload
+          res.redirect(`/profile_page.html?contentId=${contentId}`);
+        })
+        .catch((error) => {
+          // Insert query failed
+          console.log(error);
+          res.status(500).send();
+        });
     });
   });
-  
 
-     /* pool.query(
-        "INSERT INTO content (user_id, content_type, content_file, view_count, likes, dislikes) VALUES ($1, $2, $3, $4, $5, $6) RETURNING content_id",
-      [1, 'file', uploadPath, 0, 0, 0]
-      )
-      .then((result) => {
-        let contentId = result.rows[0].content_id;
-
-        // File information saved to the database
-        res.status(200).json({ message: "File uploaded successfully.", contentId });
-      })
-      .catch((error) => {
-        // Insert query failed
-        console.log(error);
-        res.status(500).send();
-      });
-  });
-});
-*/
+    
 app.post("/signup", (req, res) => {
   let username = req.body.username;
   let plaintextPassword = req.body.plaintextPassword;
