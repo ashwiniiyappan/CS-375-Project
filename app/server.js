@@ -14,13 +14,25 @@ let hostname = "localhost";
 let port = 3000;
 let app = express();
 
+let testUser = {
+    username: "testUsername"
+}
+
 app.use(fileUpload());
 
 app.use(express.json());
 app.use(express.static("public"));
+app.set("views", path.join(__dirname, "views"));
+app.set("view engine", "ejs");
 
 let { PGUSER, PGDATA, PGPASSWORD, PGPORT, PGHOST } = process.env;
 let pool = new Pool({ PGUSER, PGDATA, PGPASSWORD, PGPORT, PGHOST });
+
+app.get("/", function (req, res) {
+    res.render("index", {
+        testUser
+    });
+});
 
 app.post("/api", (req, res) => {
   if (!req.files || Object.keys(req.files).length === 0) {
