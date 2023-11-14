@@ -37,14 +37,14 @@ app.post("/api", (req, res) => {
       }
 
       pool.query(
-        "INSERT INTO content (content_type, content_file, view_count, likes, dislikes) VALUES ($1, $2, $3, $4, $5) RETURNING content_id",
-        ['file', uploadPath, 0, 0, 0]
+        "INSERT INTO content (content_type, view_count, likes, dislikes) VALUES ($1, $2, $3, $4) RETURNING content_id",
+        ['file', 0, 0, 0]
       )
         .then((result) => {
           let contentId = result.rows[0].content_id;
   
           // File information saved to the database
-          // Redirect to the profile page after successful upload
+          // Redirect to the profile page
           res.redirect(`/profile_page.html?contentId=${contentId}`);
         })
         .catch((error) => {

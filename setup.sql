@@ -7,7 +7,7 @@ username VARCHAR(20),
 password VARCHAR(60)
 );
 CREATE TABLE content (
-content_id INT PRIMARY KEY,
+content_id SERIAL PRIMARY KEY,
 user_id INT,
 content_type VARCHAR(10),
 /*content_file (Unknown, might store seperately with a file path link)*/
