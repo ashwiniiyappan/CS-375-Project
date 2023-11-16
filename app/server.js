@@ -14,13 +14,25 @@ let hostname = "localhost";
 let port = 3000;
 let app = express();
 
+let testUser = {
+    username: "testUsername"
+}
+
 app.use(fileUpload());
 
 app.use(express.json());
 app.use(express.static("public"));
+app.set("views", path.join(__dirname, "views"));
+app.set("view engine", "ejs");
 
 let { PGUSER, PGDATA, PGPASSWORD, PGPORT, PGHOST } = process.env;
 let pool = new Pool({ PGUSER, PGDATA, PGPASSWORD, PGPORT, PGHOST });
+
+app.get("/", function (req, res) {
+    res.render("index", {
+        testUser
+    });
+});
 
 app.post("/api", (req, res) => {
   if (!req.files || Object.keys(req.files).length === 0) {
@@ -102,7 +114,9 @@ app.post("/signup", (req, res) => {
               .then(() => {
                 // Account created
                 console.log(username, "account created");
-                return res.status(200).send();
+                res.status(200).send();
+                res.redirect(`/index`);
+                res.render("index");
               })
               .catch((error) => {
                 // Insert failed
@@ -133,7 +147,7 @@ app.post("/signin", (req, res) => {
     .query("SELECT password FROM users WHERE username = $1", [username])
     .then((result) => {
       if (result.rows.length === 0) {
-        // username doesn't exist
+        consloe.log("username doesn't exist");
         return res.status(401).send();
       }
       let hashedPassword = result.rows[0].password;
@@ -142,8 +156,12 @@ app.post("/signin", (req, res) => {
         .then((passwordMatched) => {
           if (passwordMatched) {
             res.status(200).send();
+            console.log("signed in");
+            res.redirect(`/index`);
+            res.render("index");
           } else {
             res.status(401).send();
+            console.log("incorrect password");
           }
         })
         .catch((error) => {
