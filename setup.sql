@@ -10,6 +10,7 @@ CREATE TABLE content (
 content_id SERIAL PRIMARY KEY,
 user_id INT,
 content_type VARCHAR(10),
+content_path VARCHAR(255),
 /*content_file (Unknown, might store seperately with a file path link)*/
 view_count INT,
 likes INT,

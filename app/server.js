@@ -35,16 +35,15 @@ app.post("/api", (req, res) => {
       if (err) {
           return res.status(500).send(err);
       }
+      let userId = 1;
 
       pool.query(
-        "INSERT INTO content (content_type, view_count, likes, dislikes) VALUES ($1, $2, $3, $4) RETURNING content_id",
-        ['file', 0, 0, 0]
+        "INSERT INTO content (user_id, content_type, content_path, view_count, likes, dislikes) VALUES ($1, $2, $3, $4, $5, $6) RETURNING content_id",
+        [userId,'file', '/uploads/' + file.name ,0, 0, 0]
       )
         .then((result) => {
           let contentId = result.rows[0].content_id;
   
-          // File information saved to the database
-          // Redirect to the profile page
           res.redirect(`/profile_page.html?contentId=${contentId}`);
         })
         .catch((error) => {
@@ -54,6 +53,22 @@ app.post("/api", (req, res) => {
         });
     });
   });
+
+  app.get("/profile_page", (req, res) => {
+    let userId = req.query.userId;
+  
+    pool.query("SELECT * FROM content WHERE user_id = $1", [userId])
+      .then((result) => {
+        let contentList = result.rows;
+  
+        res.render("profile_page", { contentList });
+      })
+      .catch((error) => {
+        console.log(error);
+        res.status(500).send("Internal Server Error");
+      });
+  });
+  
 
     
 app.post("/signup", (req, res) => {
@@ -108,6 +123,8 @@ app.post("/signup", (req, res) => {
       return res.status(500).send();
     });
 });
+
+
 
 app.post("/signin", (req, res) => {
   let username = req.body.username;
