@@ -147,7 +147,7 @@ app.post("/signin", (req, res) => {
     .query("SELECT password FROM users WHERE username = $1", [username])
     .then((result) => {
       if (result.rows.length === 0) {
-        consloe.log("username doesn't exist");
+        console.log("username doesn't exist");
         return res.status(401).send();
       }
       let hashedPassword = result.rows[0].password;
