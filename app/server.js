@@ -43,7 +43,7 @@ app.get("/", function (req, res) {
             maxAge: 900000
         });
     } else {
-        //C is for cookie, and that's good enough for me
+        //C is for cookie
         console.log("We have a cookie: ", req.cookies);
     }
     return res.render("index", {
