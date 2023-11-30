@@ -16,9 +16,7 @@ let hostname = "localhost";
 let port = 3000;
 let app = express();
 
-let testUser = {
-    username: "testUsername"
-}
+let currUser = {};
 
 app.use(fileUpload());
 
@@ -40,18 +38,21 @@ app.get("/", function (req, res, next) {
             httpOnly: false,
             secure: false,
             sameSite: "none",
-            maxAge: 900000
+            maxAge: 900000,
+            overwrite: true
         });
+        currUser.username = req.cookies.Username;
     } else {
         //C is for cookie
         console.log("We have a cookie: ", req.cookies.length);
+        currUser.username = req.cookies.Username;
     }
     next();
 });
 
 app.get("/", function (req, res) {
   return res.render("index", {
-    testUser
+    currUser
   });
 })
 

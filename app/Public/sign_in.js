@@ -2,11 +2,13 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const bcrypt = require('bcrypt');
 let env = require(".env");
+let cookieParser = require("cookie-parser");
 
 const app = express();
 const port = 3000;
 
 app.use(bodyParser.json());
+app.use(cookieParser());
 
 let pool = new Pool(env);
 pool.connect().then(() => {
@@ -45,6 +47,7 @@ app.post("/signup", (req, res) => {
               .then(() => {
                 // Account created
                 console.log(username, "account created");
+                req.cookies.Username = username;
                 return res.status(200).send();
               })
               .catch((error) => {
@@ -82,6 +85,7 @@ app.post("/signin", (req, res) => {
         .compare(plaintextPassword, hashedPassword)
         .then((passwordMatched) => {
           if (passwordMatched) {
+            res.cookie("Username", username);
             res.status(200).send();
           } else {
             res.status(401).send();
