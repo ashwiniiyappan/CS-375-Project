@@ -32,24 +32,28 @@ app.set("view engine", "ejs");
 let { PGUSER, PGDATA, PGPASSWORD, PGPORT, PGHOST } = process.env;
 let pool = new Pool({ PGUSER, PGDATA, PGPASSWORD, PGPORT, PGHOST });
 
-app.get("/", function (req, res) {
-    if (typeof req.cookies === "undefined") {
+app.get("/", function (req, res, next) {
+    if (typeof req.cookies.length === "undefined") {
         //Set cookie
         console.log("We must set a cookie");
-        res.cookie("Name", Math.random().toString(), {
+        res.cookie("UserId", Math.random().toString(), "Username", "Default", {
             httpOnly: false,
             secure: false,
             sameSite: "none",
             maxAge: 900000
         });
     } else {
-        //C is for cookie, and that's good enough for me
-        console.log("We have a cookie: ", req.cookies);
+        //C is for cookie
+        console.log("We have a cookie: ", req.cookies.length);
     }
-    return res.render("index", {
-        testUser
-    });
+    next();
 });
+
+app.get("/", function (req, res) {
+  return res.render("index", {
+    testUser
+  });
+})
 
 app.post("/api", (req, res) => {
   if (!req.files || Object.keys(req.files).length === 0) {
