@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Username</title>
+</head>
+<body>
+  <button id = "Upload" onclick="redirectToUploadPage()">
+    Upload New Post
+  </button>
+  <% for (let content of contentList) { %>
+    <div>
+        <p>Content ID: <%= content.content_id %></p>
+        <p>User ID: <%= content.user_id %></p>
+        <p>Content Type: <%= content.content_type %></p>
+        <p>View Count: <%= content.view_count %></p>
+        <p>Likes: <%= content.likes %></p>
+        <p>Dislikes: <%= content.dislikes %></p>
+
+       
+        <img src="<%= content.content_path %>" alt="Content Image" width="300">
+
+       
+
+    </div>
+    <hr>
+<% } %>
+    function redirectToUploadPage() {
+      window.location.href = '/upload_content.html';
+    }
+  </script>
+</body>
+</html>

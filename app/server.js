@@ -34,37 +34,42 @@ app.get("/", function (req, res) {
     });
 });
 
-app.post("/api", (req, res) => {
+app.post("/api", async (req, res) => {
   if (!req.files || Object.keys(req.files).length === 0) {
-      return res.status(400).json({ message: "No files were uploaded." });
+    return res.status(400).json({ message: "No files were uploaded." });
   }
 
-  let file = req.files.file; 
+  let file = req.files.file;
 
   let uploadPath = path.join(__dirname, "public/uploads", file.name);
 
-  file.mv(uploadPath, (err) => {
-      if (err) {
-          return res.status(500).send(err);
-      }
-      let userId = 1;
+  try {
+    
+    await file.mv(uploadPath);
 
-      pool.query(
-        "INSERT INTO content (user_id, content_type, content_path, view_count, likes, dislikes) VALUES ($1, $2, $3, $4, $5, $6) RETURNING content_id",
-        [userId,'file', '/uploads/' + file.name ,0, 0, 0]
-      )
-        .then((result) => {
-          let contentId = result.rows[0].content_id;
-  
-          res.redirect(`/profile_page.html?contentId=${contentId}`);
-        })
-        .catch((error) => {
-          // Insert query failed
-          console.log(error);
-          res.status(500).send();
-        });
-    });
-  });
+   
+    let userId = 1;
+
+    const insertResult = await pool.query(
+      "INSERT INTO content (user_id, content_type, content_path, view_count, likes, dislikes) VALUES ($1, $2, $3, $4, $5, $6) RETURNING content_id",
+      [userId, 'file', '/uploads/' + file.name, 0, 0, 0]
+    );
+
+    let contentId = insertResult.rows[0].content_id;
+
+   
+    const fetchResult = await pool.query("SELECT * FROM content WHERE user_id = $1", [userId]);
+    let contentList = fetchResult.rows;
+
+    
+    res.render("profile_page", { contentList });
+  } catch (error) {
+    // Handle errors
+    console.log(error);
+    res.status(500).send();
+  }
+});
+
 
   app.get("/profile_page", (req, res) => {
     let userId = req.query.userId;
