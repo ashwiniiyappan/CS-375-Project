@@ -3,6 +3,8 @@ let { Pool } = require("pg");
 let fileUpload = require("express-fileupload");
 let path = require("path");
 let bcrypt = require("bcrypt");
+let cookieParser = require("cookie-parser");
+let helmet = require("helmet");
 
 // env-cmd expects .env in current directory
 // so npm run start can't include cd app
@@ -22,6 +24,8 @@ app.use(fileUpload());
 
 app.use(express.json());
 app.use(express.static("public"));
+app.use(cookieParser());
+app.use(helmet());
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 
@@ -29,7 +33,20 @@ let { PGUSER, PGDATA, PGPASSWORD, PGPORT, PGHOST } = process.env;
 let pool = new Pool({ PGUSER, PGDATA, PGPASSWORD, PGPORT, PGHOST });
 
 app.get("/", function (req, res) {
-    res.render("index", {
+    if (typeof req.cookies === "undefined") {
+        //Set cookie
+        console.log("We must set a cookie");
+        res.cookie("Name", Math.random().toString(), {
+            httpOnly: false,
+            secure: false,
+            sameSite: "none",
+            maxAge: 900000
+        });
+    } else {
+        //C is for cookie
+        console.log("We have a cookie: ", req.cookies);
+    }
+    return res.render("index", {
         testUser
     });
 });
@@ -120,8 +137,7 @@ app.post("/signup", (req, res) => {
                 // Account created
                 console.log(username, "account created");
                 res.status(200).send();
-                res.redirect(`/index`);
-                res.render("index");
+                res.redirect(`/`);
               })
               .catch((error) => {
                 // Insert failed
@@ -152,33 +168,32 @@ app.post("/signin", (req, res) => {
     .query("SELECT password FROM users WHERE username = $1", [username])
     .then((result) => {
       if (result.rows.length === 0) {
-        consloe.log("username doesn't exist");
-        return res.status(401).send();
+        console.log("username doesn't exist");
+        res.status(401).send("Username not found");
+      } else {
+        let hashedPassword = result.rows[0].password;
+        bcrypt
+          .compare(plaintextPassword, hashedPassword)
+          .then((passwordMatched) => {
+            if (passwordMatched) {
+              console.log("signed in");
+              res.redirect("/"); // Redirect to "/index" on successful sign-in
+            } else {
+              console.log("incorrect password");
+              res.status(401).send("Incorrect password");
+            }
+          })
+          .catch((error) => {
+            // bcrypt crashed
+            console.log(error);
+            res.status(500).send("Internal Server Error");
+          });
       }
-      let hashedPassword = result.rows[0].password;
-      bcrypt
-        .compare(plaintextPassword, hashedPassword)
-        .then((passwordMatched) => {
-          if (passwordMatched) {
-            res.status(200).send();
-            console.log("signed in");
-            res.redirect(`/index`);
-            res.render("index");
-          } else {
-            res.status(401).send();
-            console.log("incorrect password");
-          }
-        })
-        .catch((error) => {
-          // bcrypt crashed
-          console.log(error);
-          res.status(500).send();
-        });
     })
     .catch((error) => {
       // select crashed
       console.log(error);
-      res.status(500).send();
+      res.status(500).send("Internal Server Error");
     });
 });
 
