@@ -51,7 +51,7 @@ app.get("/", function (req, res) {
     });
 });
 
-app.post("/api", async (req, res) => {
+app.post("/profile_page", async (req, res) => {
   if (!req.files || Object.keys(req.files).length === 0) {
     return res.status(400).json({ message: "No files were uploaded." });
   }
@@ -89,7 +89,7 @@ app.post("/api", async (req, res) => {
 
 
 app.get("/profile_page", (req, res) => {
-    let userId = req.query.userId;
+    let userId = 1;
   
     pool.query("SELECT * FROM content WHERE user_id = $1", [userId])
       .then((result) => {
