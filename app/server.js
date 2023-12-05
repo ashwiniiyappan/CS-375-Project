@@ -26,8 +26,8 @@ app.use(express.json());
 app.use(express.static("public"));
 app.use(cookieParser());
 app.use(helmet());
-app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "views"));
 
 let { PGUSER, PGDATA, PGPASSWORD, PGPORT, PGHOST } = process.env;
 let pool = new Pool({ PGUSER, PGDATA, PGPASSWORD, PGPORT, PGHOST });
@@ -46,7 +46,7 @@ app.get("/", function (req, res) {
         //C is for cookie
         console.log("We have a cookie: ", req.cookies);
     }
-    return res.render("index", {
+    res.render("index", {
         testUser
     });
 });
@@ -88,7 +88,7 @@ app.post("/api", async (req, res) => {
 });
 
 
-  app.get("/profile_page", (req, res) => {
+app.get("/profile_page", (req, res) => {
     let userId = req.query.userId;
   
     pool.query("SELECT * FROM content WHERE user_id = $1", [userId])
@@ -136,9 +136,7 @@ app.post("/signup", (req, res) => {
               .then(() => {
                 // Account created
                 console.log(username, "account created");
-                res.status(200).send();
-                res.redirect(`/index`);
-                res.render("index");
+                res.redirect(`/`);
               })
               .catch((error) => {
                 // Insert failed

@@ -4,9 +4,11 @@
   <title>Username</title>
 </head>
 <body>
-  <button id = "Upload" onclick="redirectToUploadPage()">
-    Upload New Post
-  </button>
+  <a href="upload_content.html">
+    <button id = "Upload">
+      Upload New Post
+    </button>
+  </a>
   <% for (let content of contentList) { %>
     <div>
         <p>Content ID: <%= content.content_id %></p>
