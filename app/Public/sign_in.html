@@ -56,9 +56,9 @@ document.getElementById("create_account").addEventListener("click", () => {
 		})
 	}).then((response) => {
 		if (response.status === 200) {
-			result.textContent = "Account was created";
+			console.log("Account Created")
 		} else {
-			result.textContent = "Account creation failed";
+			console.log("Account failed to create");
 		}
 	});
 });
