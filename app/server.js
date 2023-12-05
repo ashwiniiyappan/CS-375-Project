@@ -136,7 +136,6 @@ app.post("/signup", (req, res) => {
               .then(() => {
                 // Account created
                 console.log(username, "account created");
-                res.status(200).send();
                 res.redirect(`/`);
               })
               .catch((error) => {
