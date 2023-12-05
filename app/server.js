@@ -168,32 +168,31 @@ app.post("/signin", (req, res) => {
     .then((result) => {
       if (result.rows.length === 0) {
         console.log("username doesn't exist");
-        return res.status(401).send();
+        res.status(401).send("Username not found");
+      } else {
+        let hashedPassword = result.rows[0].password;
+        bcrypt
+          .compare(plaintextPassword, hashedPassword)
+          .then((passwordMatched) => {
+            if (passwordMatched) {
+              console.log("signed in");
+              res.redirect("/"); // Redirect to "/index" on successful sign-in
+            } else {
+              console.log("incorrect password");
+              res.status(401).send("Incorrect password");
+            }
+          })
+          .catch((error) => {
+            // bcrypt crashed
+            console.log(error);
+            res.status(500).send("Internal Server Error");
+          });
       }
-      let hashedPassword = result.rows[0].password;
-      bcrypt
-        .compare(plaintextPassword, hashedPassword)
-        .then((passwordMatched) => {
-          if (passwordMatched) {
-            res.status(200).send();
-            console.log("signed in");
-            res.redirect(`/index`);
-            res.render("index");
-          } else {
-            res.status(401).send();
-            console.log("incorrect password");
-          }
-        })
-        .catch((error) => {
-          // bcrypt crashed
-          console.log(error);
-          res.status(500).send();
-        });
     })
     .catch((error) => {
       // select crashed
       console.log(error);
-      res.status(500).send();
+      res.status(500).send("Internal Server Error");
     });
 });
 
