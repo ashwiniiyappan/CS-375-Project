@@ -39,6 +39,7 @@ document.getElementById("sign_in").addEventListener("click", () => {
 	}).then((response) => {
 		if (response.status === 200) {
 			result.textContent = "Login successful";
+			window.location.href = "../";
 		} else {
 			result.textContent = "Login failed";
 		}

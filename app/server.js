@@ -192,7 +192,19 @@ app.post("/signin", (req, res) => {
           .then((passwordMatched) => {
             if (passwordMatched) {
               console.log("signed in");
-              res.redirect("/"); // Redirect to "/index" on successful sign-in
+              pool.query("SELECT user_id FROM users WHERE username = $1", [username])
+                .then((result) => {
+                  userid = result.rows[0].user_id;
+                  res.cookie("UserID", userid, {
+                    expires: new Date("31 December 2024"),
+                    httpOnly: true
+                  });
+                  res.cookie("Username", username, {
+                    expires: new Date("31 December 2024"),
+                    httpOnly: true
+                  })
+                  res.redirect(`/`); // Redirect to "/index" on successful sign-in
+                })
             } else {
               console.log("incorrect password");
               res.status(401).send("Incorrect password");
