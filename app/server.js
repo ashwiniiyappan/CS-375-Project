@@ -16,10 +16,7 @@ let hostname = "localhost";
 let port = 3000;
 let app = express();
 
-let testUser = {
-    userid: 1234,
-    username: "testUsername"
-}
+let testUser = {};
 
 app.use(fileUpload());
 
@@ -36,11 +33,12 @@ let username = "default";
 let userid = "1234";
 
 app.get("/", function (req, res) {
-    if (typeof req.cookies === "undefined") {
+    if (req.cookies.UserID === undefined) {
         //Set cookie
         console.log("No cookies");
     } else {
         //C is for cookie
+        console.log("Typeof cookie =", typeof req.cookies.userID);
         console.log("We have a cookie: ", req.cookies);
         testUser.userid = req.cookies.userID;
         testUser.username = req.cookies.Username;

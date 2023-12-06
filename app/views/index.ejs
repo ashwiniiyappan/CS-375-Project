@@ -5,7 +5,7 @@
 </head>
 <body>
   <div style = "padding: 10px;">
-    <% if (typeof testUser == "undefined") { %>
+    <% if (Object.keys(testUser).length < 1) { %>
       <a href = "sign_in.html">
         <button id = "sign_in">Sign in/Create Account</button>
       </a>
