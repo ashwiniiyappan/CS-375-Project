@@ -17,6 +17,7 @@ let port = 3000;
 let app = express();
 
 let testUser = {
+    userid: 1234,
     username: "testUsername"
 }
 
@@ -31,23 +32,21 @@ app.set("views", path.join(__dirname, "views"));
 
 let { PGUSER, PGDATA, PGPASSWORD, PGPORT, PGHOST } = process.env;
 let pool = new Pool({ PGUSER, PGDATA, PGPASSWORD, PGPORT, PGHOST });
+let username = "default";
+let userid = "1234";
 
 app.get("/", function (req, res) {
     if (typeof req.cookies === "undefined") {
         //Set cookie
-        console.log("We must set a cookie");
-        res.cookie("Name", Math.random().toString(), {
-            httpOnly: false,
-            secure: false,
-            sameSite: "none",
-            maxAge: 900000
-        });
+        console.log("No cookies");
     } else {
         //C is for cookie
         console.log("We have a cookie: ", req.cookies);
+        testUser.userid = req.cookies.userID;
+        testUser.username = req.cookies.Username;
     }
     res.render("index", {
-        testUser
+      testUser
     });
 });
 
@@ -136,7 +135,24 @@ app.post("/signup", (req, res) => {
               .then(() => {
                 // Account created
                 console.log(username, "account created");
-                res.redirect(`/`);
+                pool.query("SELECT user_id FROM users WHERE username = $1", [username])
+                  .then((result) => {
+                    userid = result.rows[0].user_id;
+                    res.cookie("UserID", userid, {
+                      expires: new Date("31 December 2024"),
+                      httpOnly: true
+                    });
+                    res.cookie("Username", username, {
+                      expires: new Date("31 December 2024"),
+                      httpOnly: true
+                    })
+                    res.redirect(`/`);
+                  })
+                  .catch((error) => {
+                    console.log(error);
+                    return res.status(500).send();
+                  })
+                
               })
               .catch((error) => {
                 // Insert failed

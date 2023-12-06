@@ -28,6 +28,7 @@ let result = document.getElementById("result");
 document.getElementById("sign_in").addEventListener("click", () => {
 	fetch("/signin", {
 		method: "POST",
+		credentials: "include",
 		headers: {
 			"Content-Type": "application/json"
 		},
@@ -47,6 +48,7 @@ document.getElementById("sign_in").addEventListener("click", () => {
 document.getElementById("create_account").addEventListener("click", () => {
 	fetch("/signup", {
 		method: "POST",
+		credentials: "include",
 		headers: {
 			"Content-Type": "application/json"
 		},
@@ -57,6 +59,7 @@ document.getElementById("create_account").addEventListener("click", () => {
 	}).then((response) => {
 		if (response.status === 200) {
 			console.log("Account Created")
+			window.location.href = "../";
 		} else {
 			console.log("Account failed to create");
 		}
