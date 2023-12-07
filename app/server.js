@@ -34,7 +34,8 @@ let userid = "1234";
 
 app.get("/", function (req, res) {
     if (req.cookies.UserID === undefined) {
-        //Set cookie
+        //No Cookie
+        testUser = {};
         console.log("No cookies");
     } else {
         //C is for cookie
@@ -221,6 +222,12 @@ app.post("/signin", (req, res) => {
       res.status(500).send("Internal Server Error");
     });
 });
+
+app.get("/signout", (req, res) => {
+  res.clearCookie("Username");
+  res.clearCookie("UserID");
+  res.redirect("/");
+})
 
 pool.connect().then(() => {
     pool.query("SELECT * FROM content").then(result => {
