@@ -32,7 +32,11 @@ let pool = new Pool({ PGUSER, PGDATA, PGPASSWORD, PGPORT, PGHOST });
 let username = "default";
 let userid = "1234";
 
-app.get("/", function (req, res) {
+app.get("/", (req, res) => {
+  pool.query("SELECT * FROM content ORDER BY view_count DESC")
+        .then((result) => {
+            const contentList = result.rows;
+
     if (req.cookies.UserID === undefined) {
         //No Cookie
         testUser = {};
@@ -45,9 +49,16 @@ app.get("/", function (req, res) {
         testUser.username = req.cookies.Username;
     }
     res.render("index", {
-      testUser
+      testUser,
+      contentList
+    });
+  })
+  .catch((error) => {
+      console.error(error);
+      res.status(500).send("Internal Server Error");
     });
 });
+
 
 app.post("/profile_page", async (req, res) => {
   if (!req.files || Object.keys(req.files).length === 0) {

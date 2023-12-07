@@ -26,6 +26,19 @@
   </div>
   <div id = "video_list">
     <!--Get the table of media, list media in descending order of views, list 1 video per row. Pull thumbnail, pull title, pull user-->
-  </div>
+    <% for (let content of contentList) { %>
+      <div>
+        <p>Content ID: <%= content.content_id %></p>
+        <p>User ID: <%= content.user_id %></p>
+        <p>Content Type: <%= content.content_type %></p>
+        <p>View Count: <%= content.view_count %></p>
+        <p>Likes: <%= content.likes %></p>
+        <p>Dislikes: <%= content.dislikes %></p>
+
+        <img src="<%= content.content_path %>" alt="Content Image" width="300">
+      </div>
+      <hr>
+      <% } %>
+    </div>
 </body>
 </html>
