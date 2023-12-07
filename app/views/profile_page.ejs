@@ -1,30 +1,41 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Username</title>
+    <title>Username's Profile</title>
 </head>
 <body>
-  <a href="upload_content.html">
-    <button id = "Upload">
-      Upload New Post
-    </button>
-  </a>
-  <% for (let content of contentList) { %>
-    <div>
-        <p>Content ID: <%= content.content_id %></p>
-        <p>User ID: <%= content.user_id %></p>
-        <p>Content Type: <%= content.content_type %></p>
-        <p>View Count: <%= content.view_count %></p>
-        <p>Likes: <%= content.likes %></p>
-        <p>Dislikes: <%= content.dislikes %></p>
+    <a href="upload_content.html">
+        <button id="Upload">
+            Upload New Post
+        </button>
+    </a>
 
-       
-        <img src="<%= content.content_path %>" alt="Content Image" width="300">
+    <section id="myContent">
+        <% for (let content of contentList) { %>
+            <div>
+                <p>Content ID: <%= content.content_id %></p>
+                <p>User ID: <%= content.user_id %></p>
+                <p>Content Type: <%= content.content_type %></p>
+                <p>View Count: <%= content.view_count %></p>
+                <p>Likes: <%= content.likes %></p>
+                <p>Dislikes: <%= content.dislikes %></p>
 
-       
+                <% if (content.content_type === 'image') { %>
+                    <!-- Display image -->
+                    <img src="<%= content.content_path %>" alt="Content Image" width="300">
+                <% } else if (content.content_type === 'video') { %>
+                    <!-- Display video -->
+                    <video width="300" controls>
+                        <source src="<%= content.content_path %>" type="video/mp4">
+                        <source src="<%= content.content_path %>" type="video/webm">
+                        <source src="<%= content.content_path %>" type="video/quicktime">
+                        Your browser does not support the video tag.
+                    </video>
+                <% } %>
 
-    </div>
-    <hr>
-<% } %>
+            </div>
+            <hr>
+        <% } %>
+    </section>
 </body>
 </html>

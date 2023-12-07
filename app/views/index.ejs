@@ -35,7 +35,18 @@
         <p>Likes: <%= content.likes %></p>
         <p>Dislikes: <%= content.dislikes %></p>
 
-        <img src="<%= content.content_path %>" alt="Content Image" width="300">
+        <% if (content.content_type === 'image') { %>
+          <!-- Display image -->
+          <img src="<%= content.content_path %>" alt="Content Image" width="300">
+      <% } else if (content.content_type === 'video') { %>
+          <!-- Display video -->
+          <video width="300" controls>
+              <source src="<%= content.content_path %>" type="video/mp4">
+              <source src="<%= content.content_path %>" type="video/webm">
+              <source src="<%= content.content_path %>" type="video/quicktime">
+              Your browser does not support the video tag.
+          </video>
+      <% } %>
       </div>
       <hr>
       <% } %>

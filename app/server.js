@@ -78,7 +78,7 @@ app.post("/profile_page", async (req, res) => {
 
     const insertResult = await pool.query(
       "INSERT INTO content (user_id, content_type, content_path, view_count, likes, dislikes) VALUES ($1, $2, $3, $4, $5, $6) RETURNING content_id",
-      [userId, 'file', '/uploads/' + file.name, 0, 0, 0]
+      [userId, file.mimetype.startsWith("image") ? 'image' : 'video', '/uploads/' + file.name, 0, 0, 0]
     );
 
     let contentId = insertResult.rows[0].content_id;
