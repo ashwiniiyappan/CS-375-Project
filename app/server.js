@@ -74,7 +74,7 @@ app.post("/profile_page", async (req, res) => {
     await file.mv(uploadPath);
 
    
-    let userId = 1;
+    let userId = req.cookies.UserID;
 
     const insertResult = await pool.query(
       "INSERT INTO content (user_id, content_type, content_path, view_count, likes, dislikes) VALUES ($1, $2, $3, $4, $5, $6) RETURNING content_id",
@@ -98,7 +98,7 @@ app.post("/profile_page", async (req, res) => {
 
 
 app.get("/profile_page", (req, res) => {
-    let userId = 1;
+    let userId = req.cookies.UserID;
   
     pool.query("SELECT * FROM content WHERE user_id = $1", [userId])
       .then((result) => {
