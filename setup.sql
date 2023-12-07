@@ -4,7 +4,8 @@ CREATE DATABASE dragons_den;
 CREATE TABLE users (
 user_id SERIAL PRIMARY KEY,
 username VARCHAR(20),
-password VARCHAR(60)
+password VARCHAR(60),
+watch_history_ids INT[]
 );
 CREATE TABLE content (
 content_id SERIAL PRIMARY KEY,
@@ -22,4 +23,9 @@ content_id INT,
 comment_text VARCHAR(250),
 liked BOOLEAN,
 disliked BOOLEAN
+);
+CREATE TABLE playlists (
+	playlist_id SERIAL PRIMARY KEY,
+	user_id INT,
+	content_ids INT[]
 );
