@@ -67,8 +67,9 @@ app.post("/profile_page", async (req, res) => {
 
   let file = req.files.file;
 
-  let uploadPath = path.join(__dirname, "public/uploads", file.name);
+  let title = req.body.title || 'Untitled'; // Default to 'Untitled' if title is not provided
 
+  let uploadPath = path.join(__dirname, "public/uploads", `${title}_${file.name}`);
   try {
     
     await file.mv(uploadPath);
@@ -77,8 +78,8 @@ app.post("/profile_page", async (req, res) => {
     let userId = req.cookies.UserID;
 
     const insertResult = await pool.query(
-      "INSERT INTO content (user_id, content_type, content_path, view_count, likes, dislikes) VALUES ($1, $2, $3, $4, $5, $6) RETURNING content_id",
-      [userId, file.mimetype.startsWith("image") ? 'image' : 'video', '/uploads/' + file.name, 0, 0, 0]
+      "INSERT INTO content (user_id, content_type, content_path, view_count, likes, dislikes, title) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING content_id",
+      [userId, file.mimetype.startsWith("image") ? 'image' : 'video', `/uploads/${title}_${file.name}`, 0, 0, 0, title]
     );
 
     let contentId = insertResult.rows[0].content_id;
@@ -98,19 +99,19 @@ app.post("/profile_page", async (req, res) => {
 
 
 app.get("/profile_page", (req, res) => {
-    let userId = req.cookies.UserID;
-  
-    pool.query("SELECT * FROM content WHERE user_id = $1", [userId])
-      .then((result) => {
-        let contentList = result.rows;
-  
-        res.render("profile_page", { contentList });
-      })
-      .catch((error) => {
-        console.log(error);
-        res.status(500).send("Internal Server Error");
-      });
-  });
+  let userId = req.cookies.UserID;
+
+  pool.query("SELECT * FROM content WHERE user_id = $1", [userId])
+    .then((result) => {
+      let contentList = result.rows;
+
+      res.render("profile_page", { contentList });
+    })
+    .catch((error) => {
+      console.log(error);
+      res.status(500).send("Internal Server Error");
+    });
+}); 
   
 
     

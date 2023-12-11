@@ -1,8 +1,54 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <title>Upload Content</title>
-</head>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Upload Content</title>
+        <style>
+            body {
+                font-family: 'Arial', sans-serif;
+                background-color: #f0f0f0;
+                margin: 0;
+                padding: 0;
+                text-align: center;
+            }
+    
+    
+            form {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+    
+            label {
+                margin-top: 10px;
+                font-size: 18px;
+            }
+    
+            input {
+                margin-top: 5px;
+                padding: 8px;
+                font-size: 16px;
+            }
+    
+            #upload_button {
+                margin-top: 20px;
+                font-size: 20px;
+                background-color: #4CAF50;
+                color: white;
+                padding: 10px 20px;
+                text-decoration: none;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+            }
+    
+            #currently_uploading {
+                margin-top: 20px;
+                font-size: 18px;
+            }
+        </style>
+    </head>
 <body>
     <div style="margin: auto; border: 3px solid; border-color: black; text-align: center; font-size: 50px;">
         Choose Content to Upload
@@ -11,6 +57,11 @@
         <form action="/profile_page" method="post" enctype="multipart/form-data">
             <label for="file">File</label>
             <input id="file" name="file" type="file" accept="image/*, video/*" />
+
+            <label for="title">Title</label>
+            <input id="title" name="title" type="text" placeholder="Enter Title" />
+
+
             <div style="position: absolute; bottom: 10%; left: 45%;">
                 <button id="upload_button" style="font-size: 60px;">
                     Upload
@@ -21,8 +72,6 @@
     <div id="currently_uploading"> <!-- Align to the right of browse files button -->
 
     </div>
-    <div id="current_content_title" style="float: right; margin-right: 10%;"> <!-- Align under currently uploading preview -->
-        <input type="text" id="current_title" placeholder="Current Title">
-    </div>
+   
 </body>
 </html>

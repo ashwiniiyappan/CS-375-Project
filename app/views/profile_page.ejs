@@ -1,16 +1,75 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Username's Profile</title>
+  <style>
+      body {
+          font-family: Arial, sans-serif;
+          background-color: #f0f0f0;
+          margin: 0;
+          padding: 0;
+      }
+
+      header {
+          background-color: #333;
+          color: white;
+          padding: 10px;
+          text-align: center;
+      }
+
+      #userContent {
+          margin: 20px;
+          padding: 20px;
+          background-color: white;
+          border-radius: 8px;
+          box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+
+      #userContent div {
+          margin-bottom: 20px;
+      }
+
+      #userContent hr {
+          border: 1px solid #ddd;
+          margin: 10px 0;
+      }
+
+      #Upload {
+          background-color: #4CAF50;
+          color: white;
+          padding: 10px 20px;
+          text-decoration: none;
+          border: none;
+          border-radius: 5px;
+          cursor: pointer;
+      }
+
+      #homeButton {
+          background-color: #333;
+          color: white;
+          padding: 10px 20px;
+          text-decoration: none;
+          border: none;
+          border-radius: 5px;
+          cursor: pointer;
+          margin-top: 20px;
+      }
+  </style>
 </head>
+
 <body>
     <a href="upload_content.html">
         <button id="Upload">
             Upload New Post
         </button>
     </a>
+    <a href="/">
+      <button id="homeButton">
+          Home
+      </button>
+    </a>
 
     <section id="myContent">
+      <h2>My Content</h2>
         <% for (let content of contentList) { %>
             <div>
                 <p>Content ID: <%= content.content_id %></p>
@@ -32,10 +91,12 @@
                         Your browser does not support the video tag.
                     </video>
                 <% } %>
+                <div class="content-title"><%= content.title %></div>
 
             </div>
             <hr>
         <% } %>
     </section>
+  
 </body>
 </html>

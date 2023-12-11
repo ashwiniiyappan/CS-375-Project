@@ -46,9 +46,12 @@
               <source src="<%= content.content_path %>" type="video/quicktime">
               Your browser does not support the video tag.
           </video>
-      <% } %>
-      </div>
-      <hr>
+          <% } %>
+
+          <!-- Display the title -->
+          <div class="content-title"><%= content.title %></div>
+        </div>
+        <hr>
       <% } %>
     </div>
 </body>

@@ -15,7 +15,8 @@ content_path VARCHAR(255),
 /*content_file (Unknown, might store seperately with a file path link)*/
 view_count INT,
 likes INT,
-dislikes INT
+dislikes INT,
+title VARCHAR(255)
 );
 CREATE TABLE interactions (
 user_id INT PRIMARY KEY,
