@@ -21,6 +21,7 @@ let testUser = {};
 app.use(fileUpload());
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 app.use(express.static("public"));
 app.use(cookieParser());
 app.use(helmet());
@@ -271,6 +272,14 @@ app.get("/signout", (req, res) => {
   res.clearCookie("Username");
   res.clearCookie("UserID");
   res.redirect("/");
+})
+
+app.post("/search", (req, res) => {
+  console.log("Body:", req.body);
+  console.log("Params:", req.params);
+  console.log("Query:", req.query);
+
+  res.status(200).send();
 })
 
 pool.connect().then(() => {
