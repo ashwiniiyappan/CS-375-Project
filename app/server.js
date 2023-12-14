@@ -34,7 +34,7 @@ let username = "default";
 let userid = "1234";
 
 app.get("/", (req, res) => {
-  pool.query("SELECT * FROM content ORDER BY view_count DESC")
+  pool.query("SELECT content.*, users.username FROM content JOIN users ON content.user_id = users.user_id ORDER BY content.view_count DESC")
         .then((result) => {
             const contentList = result.rows;
 
@@ -64,28 +64,49 @@ app.post('/like/:contentId', async (req, res) => {
     const contentId = req.params.contentId;
 
     if (!req.cookies.UserID) {
-      return res.status(401).json({ error: 'Unauthorized - User not logged in' });
+      return res.redirect('/sign_in.html'); 
     }
 
     const userId = req.cookies.UserID;
 
 
-    const existingInteraction = await pool.query('SELECT * FROM interactions WHERE user_id = $1 AND content_id = $2', [userId, contentId]);
+    const existingInteraction = await pool.query('SELECT * FROM interactions WHERE user_id = $1 AND content_id = $2 AND liked = true', [userId, contentId]);
 
     if (existingInteraction.rows.length > 0) {
-      return res.status(400).json({ error: 'Bad Request - User has already liked this content' });
+      return res.redirect('/');
     }
 
-    
     const updateContentLikes = await pool.query('UPDATE content SET likes = likes + 1 WHERE content_id = $1 RETURNING likes', [contentId]);
 
-    
     await pool.query('INSERT INTO interactions (user_id, content_id, liked) VALUES ($1, $2, $3)', [userId, contentId, true]);
 
-   
-    const updatedLikes = updateContentLikes.rows[0].likes;
+    res.redirect('/');
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
 
-   
+app.post('/dislike/:contentId', async (req, res) => {
+  try {
+    const contentId = req.params.contentId;
+
+    if (!req.cookies.UserID) {
+      return res.redirect('/sign_in.html'); 
+    }
+
+    const userId = req.cookies.UserID;
+
+    const existingInteraction = await pool.query('SELECT * FROM interactions WHERE user_id = $1 AND content_id = $2 AND disliked = true', [userId, contentId]);
+
+    if (existingInteraction.rows.length > 0) {
+      return res.redirect('/');
+    }
+
+    const updateContentDislikes = await pool.query('UPDATE content SET dislikes = dislikes + 1 WHERE content_id = $1 RETURNING dislikes', [contentId]);
+
+    await pool.query('INSERT INTO interactions (user_id, content_id, disliked) VALUES ($1, $2, $3)', [userId, contentId, true]);
+
     res.redirect('/');
   } catch (error) {
     console.error(error);

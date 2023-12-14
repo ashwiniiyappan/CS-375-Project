@@ -2,6 +2,35 @@
 <html>
 <head>
   <title>Dragon's Den</title>
+  <style>
+
+    .like-btn, .dislike-btn {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 20px;
+      text-decoration: none;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-right: 10px;
+      font-size: 16px;
+      transition: background-color 0.3s;
+    }
+
+    .dislike-btn {
+      background-color: #f44336;
+    }
+
+    /* Hover effect for buttons */
+    .like-btn:hover, .dislike-btn:hover {
+      background-color: #45a049;
+    }
+
+    .interaction-buttons {
+      display: flex;
+      gap: 10px;
+    }
+  </style>
 </head>
 <body>
   <div style="padding: 10px;">
@@ -19,26 +48,17 @@
     <% } %>
   </div>
   <div>
-<<<<<<< Updated upstream
     <form style="display: flex; float: right;">
       <input type="text" id="search_bar" placeholder="Search">
       <button id="search_button">Search</button>
-=======
-    <form style = "display: flex; float: right;" action="/search" method="POST">
-        <input type = "text" id = "search_bar" name = "searchQuery" placeholder = "Search">
-        <button id = "search_button", type = "submit">Search</button>
->>>>>>> Stashed changes
     </form>
   </div>
   <div id="video_list">
     <% for (let content of contentList) { %>
       <div>
-        <p>Content ID: <%= content.content_id %></p>
-        <p>User ID: <%= content.user_id %></p>
+        <p>Username: <%= content.username %></p>
         <p>Content Type: <%= content.content_type %></p>
         <p>View Count: <%= content.view_count %></p>
-        <p>Likes: <span id="likeCount_<%= content.content_id %>"><%= content.likes %></span></p>
-        <p>Dislikes: <span id="dislikeCount_<%= content.content_id %>"><%= content.dislikes %></span></p>
 
         <% if (content.content_type === 'image') { %>
           <!-- Display image -->
@@ -56,9 +76,19 @@
         <!-- Display the title -->
         <div class="content-title"><%= content.title %></div>
       </div>
-      <p>Likes: <span id="likeCount_<%= content.content_id %>"><%= content.likes %></span></p>
+      
+      <div class="interaction-buttons">
+        <p>Likes: <span id="likeCount_<%= content.content_id %>"><%= content.likes %></span></p>
         <form action="/like/<%= content.content_id %>" method="post">
-          <button type="submit">Like</button>
+          <button type="submit" class="like-btn">Like</button>
+        </form>
+      
+        <p>Dislikes: <span id="dislikeCount_<%= content.content_id %>"><%= content.dislikes %></span></p>
+        <form action="/dislike/<%= content.content_id %>" method="post">
+          <button type="submit" class="dislike-btn">Dislike</button>
+        </form>
+      </div>
+
       <hr>
     <% } %>
   </div>
