@@ -295,6 +295,22 @@ app.get("/signout", (req, res) => {
   res.redirect("/");
 })
 
+app.get('/content_view', async (req, res) => {
+
+    console.log('Query Parameters:', req.query);
+
+    const contentId = req.query.content_id;
+    console.log(contentId);
+    pool.query("SELECT user_id, content_type, content_path, view_count, likes, dislikes, title FROM content WHERE content_id = $1", [contentId])
+        .then((result) => {
+            const content = result.rows[0];
+            res.render('content_view', { content })
+            })
+        .catch((error) => {
+            res.status(404).send('Content not found');
+        })
+});
+
 app.post("/search", (req, res) => {
   currQuery = req.body.searchQuery;
   resultList = [];

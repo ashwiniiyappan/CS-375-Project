@@ -72,6 +72,15 @@
       <h2>My Content</h2>
         <% for (let content of contentList) { %>
             <div>
+<<<<<<< HEAD
+              <a href ="/content_view?content_id=<%= content.content_id %>">
+                <button id ="content_link">View Page</button>
+              </a>
+                <p>Content ID: <%= content.content_id %></p>
+  <p>
+    Username: <%= content.username %>
+  </p>
+>>>>>>> ec11f167b00e458d132877f8d7aaa9c997b7ddd4
                 <p>Content Type: <%= content.content_type %></p>
                 <p>View Count: <%= content.view_count %></p>
                 <p>Likes: <%= content.likes %></p>
