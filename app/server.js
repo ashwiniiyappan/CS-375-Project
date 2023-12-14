@@ -58,7 +58,39 @@ app.get("/", (req, res) => {
       res.status(500).send("Internal Server Error");
     });
 });
+app.post('/like/:contentId', async (req, res) => {
+  try {
+    const contentId = req.params.contentId;
 
+    if (!req.cookies.UserID) {
+      return res.status(401).json({ error: 'Unauthorized - User not logged in' });
+    }
+
+    const userId = req.cookies.UserID;
+
+
+    const existingInteraction = await pool.query('SELECT * FROM interactions WHERE user_id = $1 AND content_id = $2', [userId, contentId]);
+
+    if (existingInteraction.rows.length > 0) {
+      return res.status(400).json({ error: 'Bad Request - User has already liked this content' });
+    }
+
+    
+    const updateContentLikes = await pool.query('UPDATE content SET likes = likes + 1 WHERE content_id = $1 RETURNING likes', [contentId]);
+
+    
+    await pool.query('INSERT INTO interactions (user_id, content_id, liked) VALUES ($1, $2, $3)', [userId, contentId, true]);
+
+   
+    const updatedLikes = updateContentLikes.rows[0].likes;
+
+   
+    res.redirect('/');
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
 
 app.post("/profile_page", async (req, res) => {
   if (!req.files || Object.keys(req.files).length === 0) {

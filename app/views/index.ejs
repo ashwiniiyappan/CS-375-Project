@@ -4,55 +4,57 @@
   <title>Dragon's Den</title>
 </head>
 <body>
-  <div style = "padding: 10px;">
+  <div style="padding: 10px;">
     <% if (Object.keys(testUser).length < 1) { %>
-      <a href = "sign_in.html">
-        <button id = "sign_in">Sign in/Create Account</button>
+      <a href="sign_in.html">
+        <button id="sign_in">Sign in/Create Account</button>
       </a>
     <% } else { %>
-        <a href = "/profile_page">
-            <button id = "signed_in"><%= testUser.username%></button>
-        </a>
-        <a href = "/signout">
-          <button id = "sign_out" style = "position: relative; left: 10px">Sign Out</button>
-        </a>
+      <a href="/profile_page">
+        <button id="signed_in"><%= testUser.username %></button>
+      </a>
+      <a href="/signout">
+        <button id="sign_out" style="position: relative; left: 10px">Sign Out</button>
+      </a>
     <% } %>
   </div>
   <div>
-    <form style = "display: flex; float: right;">
-        <input type = "text" id = "search_bar" placeholder = "Search">
-        <button id = "search_button">Search</button>
+    <form style="display: flex; float: right;">
+      <input type="text" id="search_bar" placeholder="Search">
+      <button id="search_button">Search</button>
     </form>
   </div>
-  <div id = "video_list">
-    <!--Get the table of media, list media in descending order of views, list 1 video per row. Pull thumbnail, pull title, pull user-->
+  <div id="video_list">
     <% for (let content of contentList) { %>
       <div>
         <p>Content ID: <%= content.content_id %></p>
         <p>User ID: <%= content.user_id %></p>
         <p>Content Type: <%= content.content_type %></p>
         <p>View Count: <%= content.view_count %></p>
-        <p>Likes: <%= content.likes %></p>
-        <p>Dislikes: <%= content.dislikes %></p>
+        <p>Likes: <span id="likeCount_<%= content.content_id %>"><%= content.likes %></span></p>
+        <p>Dislikes: <span id="dislikeCount_<%= content.content_id %>"><%= content.dislikes %></span></p>
 
         <% if (content.content_type === 'image') { %>
           <!-- Display image -->
           <img src="<%= content.content_path %>" alt="Content Image" width="300">
-      <% } else if (content.content_type === 'video') { %>
+        <% } else if (content.content_type === 'video') { %>
           <!-- Display video -->
           <video width="300" controls>
-              <source src="<%= content.content_path %>" type="video/mp4">
-              <source src="<%= content.content_path %>" type="video/webm">
-              <source src="<%= content.content_path %>" type="video/quicktime">
-              Your browser does not support the video tag.
+            <source src="<%= content.content_path %>" type="video/mp4">
+            <source src="<%= content.content_path %>" type="video/webm">
+            <source src="<%= content.content_path %>" type="video/quicktime">
+            Your browser does not support the video tag.
           </video>
-          <% } %>
+        <% } %>
 
-          <!-- Display the title -->
-          <div class="content-title"><%= content.title %></div>
-        </div>
-        <hr>
-      <% } %>
-    </div>
+        <!-- Display the title -->
+        <div class="content-title"><%= content.title %></div>
+      </div>
+      <p>Likes: <span id="likeCount_<%= content.content_id %>"><%= content.likes %></span></p>
+        <form action="/like/<%= content.content_id %>" method="post">
+          <button type="submit">Like</button>
+      <hr>
+    <% } %>
+  </div>
 </body>
 </html>
