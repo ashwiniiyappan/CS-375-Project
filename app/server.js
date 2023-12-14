@@ -290,6 +290,14 @@ app.get('/content_view', async (req, res) => {
         })
 });
 
+app.post("/search", (req, res) => {
+  console.log("Body:", req.body);
+  console.log("Params:", req.params);
+  console.log("Query:", req.query);
+
+  res.status(200).send();
+})
+
 pool.connect().then(() => {
     pool.query("SELECT * FROM content").then(result => {
         console.log(result.rows);
