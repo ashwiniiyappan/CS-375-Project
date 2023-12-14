@@ -296,11 +296,46 @@ app.get("/signout", (req, res) => {
 })
 
 app.post("/search", (req, res) => {
-  console.log("Body:", req.body);
-  console.log("Params:", req.params);
-  console.log("Query:", req.query);
-
-  res.status(200).send();
+  currQuery = req.body.searchQuery;
+  resultList = [];
+  console.log("Body:", currQuery);
+  pool.connect().then(() => {
+    pool.query("SELECT * FROM content WHERE title = $1", [currQuery])
+    .then(async (result) => {
+      console.log(result);
+      resultList.push(result.rows[0].title);
+      console.log(resultList);
+      while (currQuery.length > 0) {
+        await pool.query("SELECT * FROM content WHERE title LIKE '%" + currQuery + "%'")
+        .then((result) => {
+          console.log(result)
+          for (let element of result.rows) {
+            // console.log("element:", element);
+            if (!resultList.includes(element.title)) {
+              resultList.push(element.title);
+              console.log(resultList);
+            }
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+          res.status(500).send("Internal Server Error");
+          currQuery = "";
+        })
+  
+        currQuery = currQuery.substring(0, currQuery.length - 1);
+      }
+      console.log("resultList:", resultList);
+      res.render("search_results", {
+        testUser,
+        resultList
+      });
+    })
+    .catch((error) => {
+      console.log(error);
+      res.status(500).send("Internal Server Error");
+    })
+  })
 })
 
 pool.connect().then(() => {

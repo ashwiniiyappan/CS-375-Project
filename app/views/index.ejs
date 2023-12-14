@@ -48,9 +48,9 @@
     <% } %>
   </div>
   <div>
-    <form style="display: flex; float: right;">
-      <input type="text" id="search_bar" placeholder="Search">
-      <button id="search_button">Search</button>
+    <form style = "display: flex; float: right;" action="/search" method="POST">
+        <input type = "text" id = "search_bar" name = "searchQuery" placeholder = "Search">
+        <button id = "search_button", type = "submit">Search</button>
     </form>
   </div>
   <div id="video_list">
