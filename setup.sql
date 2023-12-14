@@ -19,7 +19,7 @@ dislikes INT,
 title VARCHAR(255)
 );
 CREATE TABLE interactions (
-user_id INT PRIMARY KEY,
+user_id INT,
 content_id INT,
 comment_text VARCHAR(250),
 liked BOOLEAN,

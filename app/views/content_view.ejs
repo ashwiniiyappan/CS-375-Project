@@ -1,29 +1,34 @@
 <!DOCTYPE html>
 <html>
-    <body>
-        <div id = "viewed_content"> <!--Current content user is looking at aligned top middle of page-->
+<body>
+    <a href="/">
+      <button id="homeButton">
+          Home
+      </button>
+    </a>
 
+    <section id="myContent">
+        <div class="content-title"><%= content.title %></div>
+        <div>
+            <% if (content.content_type === 'image') { %>
+                <!-- Display image -->
+                <img src="<%= content.content_path %>" alt="Content Image" width="300">
+            <% } else if (content.content_type === 'video') { %>
+                <!-- Display video -->
+                <video width="300" controls>
+                    <source src="<%= content.content_path %>" type="video/mp4">
+                    <source src="<%= content.content_path %>" type="video/webm">
+                    <source src="<%= content.content_path %>" type="video/quicktime">
+                    Your browser does not support the video tag.
+                </video>
+            <% } %>
+            <p>User: <%= content.user_id %></p>
+            <p>View Count: <%= content.view_count %></p>
+            <p>Likes: <%= content.likes %></p>
+            <p>Dislikes: <%= content.dislikes %></p>
         </div>
-        <div id = "comments_list"> <!--List of comments aligned at the left below current media-->
-
-        </div>
-        <div style = "float: right; margin-right: 10%;">
-            <input type = "text" id = "current_comment" placeholder = "Write Comment Here" style = "width: 500px; block-size: 400px; font-size: 30px;">
-            <div>
-                <button id = "post_comment" style = "position: relative; margin-top: 10px; left: 20%; width: 300px; block-size: 100px;">
-                    Post Comment
-                </button>
-                <button id = "like" style = "position: relative; margin-top: 10px; left: 20%; width: 300px; block-size: 100px;">
-                    Like
-                </button>
-                <button id = "dislike" style = "position: relative; margin-top: 10px; left: 20%; width: 300px; block-size: 100px;">
-                    Dislike
-                </button>
-                <button id = "playlists" style = "position: relative; margin-top: 10px; left: 20%; width: 300px; block-size: 100px;">
-                    Add To Playlist
-                </button>
-            </div>
-        </div>
-        
-    </body>
+        <hr>
+    </section>
+  
+</body>
 </html>
