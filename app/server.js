@@ -138,12 +138,14 @@ app.post("/profile_page", async (req, res) => {
 
     let contentId = insertResult.rows[0].content_id;
 
+    const playlistsResult = await pool.query("SELECT * FROM playlists WHERE user_id = $1", [userId]);
+    let playlists = playlistsResult.rows;
    
     const fetchResult = await pool.query("SELECT * FROM content WHERE user_id = $1", [userId]);
     let contentList = fetchResult.rows;
 
     
-    res.render("profile_page", { contentList });
+    res.render("profile_page", { contentList, playlists });
   } catch (error) {
     // Handle errors
     console.log(error);

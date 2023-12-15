@@ -12,5 +12,8 @@
         "express-fileupload": "^1.4.2",
         "helmet": "^7.1.0",
         "pg": "^8.11.3"
+    },
+    "devDependencies": {
+        "@flydotio/dockerfile": "^0.4.11"
     }
 }

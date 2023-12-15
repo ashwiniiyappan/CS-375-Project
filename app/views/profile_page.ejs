@@ -75,6 +75,8 @@
 
   <div id="userPlaylists">
     <h2>User Playlists</h2>
+    <script src="/createPlaylist.js"></script>
+    <button>Create Playlist</button>
 
     <% for (let playlist of playlists) { %>
     <div>
@@ -84,8 +86,7 @@
       <p>
         Playlist ID: <%= playlist.playlist_id %>
       </p>
-      <a href="/playlist/"
-        <%= playlist.playlist_id %>">
+      <a href="/playlist/"<%= playlist.playlist_id %>">
         <button>View Playlist</button>
       </a>
     </div>
