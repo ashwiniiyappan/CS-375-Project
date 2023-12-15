@@ -304,6 +304,7 @@ app.get('/content_view', async (req, res) => {
     pool.query("SELECT user_id, content_type, content_path, view_count, likes, dislikes, title FROM content WHERE content_id = $1", [contentId])
         .then((result) => {
             const content = result.rows[0];
+            pool.query("UPDATE content SET view_count = view_count + 1 WHERE content_id = $1", [contentId]);
             res.render('content_view', { content })
             })
         .catch((error) => {
