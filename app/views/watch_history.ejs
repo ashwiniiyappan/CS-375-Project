@@ -4,13 +4,17 @@
         Dragon's Den
     </head>
     <body>
-        <ul>
+        <% if (watchHistory !== null) { %>
+            <ul>
             <% for (let count = 0; count < watchHistory.length; count++) { %> 
                 <li><%= watchHistory[count] %></li>
                 <a href="/content_view?content_id=<%=watchHistory[count] %>">
                     <button id = "content_link">View Page</button>
                 </a>
+            </ul>
             <% } %>
-        </ul>
+        <% } else { %>
+            <p>No Watch History</p>
+        <% } %>   
     </body>
 </html>

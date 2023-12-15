@@ -14,7 +14,7 @@ process.chdir(__dirname)
 
 
 let hostname = "localhost";
-let port = process.env.PORT || 3000;
+let port = process.env.PORT || process.env.PORT || 3000;
 let app = express();
 
 let testUser = {};
@@ -305,6 +305,7 @@ app.get('/content_view', async (req, res) => {
     console.log(contentId);
     pool.query("SELECT watch_history_ids FROM users WHERE user_id = $1", [req.cookies.UserID])
     .then((result) => {
+      console.log(result);
       if (result.rows[0].watch_history_ids === null) {
         pool.query("UPDATE users SET watch_history_ids = ARRAY_APPEND(ARRAY[]::integer[], $1) WHERE user_id = $2", [contentId, req.cookies.UserID])
         .then(() => {
