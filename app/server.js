@@ -318,18 +318,27 @@ app.post("/search", (req, res) => {
   pool.connect().then(() => {
     pool.query("SELECT * FROM content WHERE title = $1", [currQuery])
     .then(async (result) => {
-      console.log(result);
-      resultList.push(result.rows[0].title);
+      console.log("result:", result);
+      if (result.rows.length > 0) {
+        resultList.push(result.rows[0]);
+      }
       console.log(resultList);
       while (currQuery.length > 0) {
         await pool.query("SELECT * FROM content WHERE title LIKE '%" + currQuery + "%'")
         .then((result) => {
-          console.log(result)
+          // console.log(result)
           for (let element of result.rows) {
-            // console.log("element:", element);
-            if (!resultList.includes(element.title)) {
-              resultList.push(element.title);
-              console.log(resultList);
+            console.log("element:", element);
+            if (resultList.length > 0) {
+              if (!resultList.some(result => result.title === element.title)) {
+                resultList.push(element);
+                console.log("results:", result);
+                console.log("resultList:", resultList);
+              }
+            } else {
+                resultList.push(element);
+                console.log("results:", result);
+                console.log("resultList:", resultList);
             }
           }
         })
@@ -341,7 +350,7 @@ app.post("/search", (req, res) => {
   
         currQuery = currQuery.substring(0, currQuery.length - 1);
       }
-      console.log("resultList:", resultList);
+      console.log("final resultList:", resultList);
       res.render("search_results", {
         testUser,
         resultList

@@ -6,7 +6,10 @@
     <body>
         <ul>
             <% for (let count = 0; count < resultList.length; count++) { %> 
-                <li><%= resultList[count] %></li>
+                <li><%= resultList[count].title %></li>
+                <a href="/content_view?content_id=<%=resultList[count].content_id %>">
+                    <button id = "content_link">View Page</button>
+                </a>
             <% } %>
         </ul>
     </body>
