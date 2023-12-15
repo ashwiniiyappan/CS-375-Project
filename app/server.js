@@ -301,6 +301,26 @@ app.get('/content_view', async (req, res) => {
 
     const contentId = req.query.content_id;
     console.log(contentId);
+    pool.query("SELECT watch_history_ids FROM users WHERE user_id = $1", [req.cookies.UserID])
+    .then((result) => {
+      if (result.rows[0].watch_history_ids === null) {
+        pool.query("UPDATE users SET watch_history_ids = ARRAY_APPEND(ARRAY[]::integer[], $1) WHERE user_id = $2", [contentId, req.cookies.UserID])
+        .then(() => {
+          console.log("Video Added to Watch History");
+        })
+        .catch((error) => {
+          console.log(error);
+        })
+      } else {
+        pool.query("UPDATE users SET watch_history_ids = ARRAY_APPEND($1, $2::integer) WHERE user_id = $3", [result.rows[0].watch_history_ids, contentId, req.cookies.UserID])
+        .then(() => {
+          console.log("Video Added to Watch History");
+        })
+        .catch((error) => {
+          console.log(error);
+        })
+      }
+    })
     pool.query("SELECT user_id, content_type, content_path, view_count, likes, dislikes, title FROM content WHERE content_id = $1", [contentId])
         .then((result) => {
             const content = result.rows[0];
@@ -361,6 +381,17 @@ app.post("/search", (req, res) => {
       console.log(error);
       res.status(500).send("Internal Server Error");
     })
+  })
+})
+
+app.get("/watch_history", (req, res) => {
+  pool.query("SELECT watch_history_ids FROM users WHERE user_id = $1", [req.cookies.UserID])
+  .then((result) => {
+    watchHistory = result.rows[0].watch_history_ids;
+    res.render("watch_history", {
+      testUser,
+      watchHistory
+    });
   })
 })
 
