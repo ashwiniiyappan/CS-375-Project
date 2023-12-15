@@ -4,6 +4,17 @@
         <title>Dragon's Den</title>
     </head>
     <body>
+        <div>
+            <a href = "/">
+                <button>Home</button>
+            </a>
+        </div>
+        <div>
+            <form style = "display: flex; float: right;" action="/search" method="POST">
+                <input type = "text" id = "search_bar" name = "searchQuery" placeholder = "Search">
+                <button id = "search_button", type = "submit">Search</button>
+            </form>
+          </div>
         <ul>
             <% for (let count = 0; count < resultList.length; count++) { %> 
                 <li><%= resultList[count].title %></li>
