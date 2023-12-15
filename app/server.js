@@ -12,8 +12,9 @@ let helmet = require("helmet");
 // all relative paths will break (or need to be prefaced with app/)
 process.chdir(__dirname)
 
+
 let hostname = "localhost";
-let port = 3000;
+let port = process.env.PORT || 3000;
 let app = express();
 
 let testUser = {};
@@ -416,6 +417,6 @@ pool.connect().then(() => {
     })
 })
 
-app.listen(port, hostname, () => {
+app.listen(port, "::", () => {
   console.log(`http://${hostname}:${port}`);
 });
