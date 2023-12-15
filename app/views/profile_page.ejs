@@ -73,8 +73,29 @@
         </button>
     </a>
 
+  <div id="userPlaylists">
+    <h2>User Playlists</h2>
+
+    <% for (let playlist of playlists) { %>
+    <div>
+      <h3>
+        <%= playlist.title %>
+      </h3>
+      <p>
+        Playlist ID: <%= playlist.playlist_id %>
+      </p>
+      <a href="/playlist/"
+        <%= playlist.playlist_id %>">
+        <button>View Playlist</button>
+      </a>
+    </div>
+    <hr>
+      <% } %>
+  </div>
+
     <section id="myContent">
       <h2>My Content</h2>
+      
         <% for (let content of contentList) { %>
             <div>
               <a href ="/content_view?content_id=<%= content.content_id %>">
@@ -107,6 +128,5 @@
             <hr>
         <% } %>
     </section>
-  
 </body>
 </html>

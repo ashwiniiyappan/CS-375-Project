@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Playlist</title>
+</head>
+<body>
+    <div id="playlistContent">
+        <h2>Playlist Content</h2>
+
+        <% for (let contentId of playlist.content_ids) { %>
+            <% const content = getContentById(contentId); %>
+            <div>
+                <h3><%= content.title %></h3>
+                <% if (content.content_type === 'image') { %>
+                    <img src="<%= content.content_path %>" alt="<%= content.title %>" width="300">
+                <% } else if (content.content_type === 'video') { %>
+                    <video width="300" controls>
+                        <source src="<%= content.content_path %>" type="video/mp4">
+                        <source src="<%= content.content_path %>" type="video/webm">
+                        <source src="<%= content.content_path %>" type="video/quicktime">
+                        Your browser does not support the video tag.
+                    </video>
+                <% } %>
+                <p>View Count: <%= content.view_count %></p>
+                <p>Likes: <%= content.likes %></p>
+                <p>Dislikes: <%= content.dislikes %></p>
+            </div>
+            <hr>
+        <% } %>
+    </div>
+</body>
+</html>

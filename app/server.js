@@ -152,20 +152,19 @@ app.post("/profile_page", async (req, res) => {
 });
 
 
-app.get("/profile_page", (req, res) => {
+app.get("/profile_page", async (req, res) => {
   let userId = req.cookies.UserID;
 
-  pool.query("SELECT * FROM content WHERE user_id = $1", [userId])
-    .then((result) => {
-      let contentList = result.rows;
+  // Fetch user's playlists (adjust the query accordingly based on your schema)
+  const playlistsResult = await pool.query("SELECT * FROM playlists WHERE user_id = $1", [userId]);
+  let playlists = playlistsResult.rows;
 
-      res.render("profile_page", { contentList });
-    })
-    .catch((error) => {
-      console.log(error);
-      res.status(500).send("Internal Server Error");
-    });
-}); 
+  // Fetch user's content (adjust the query accordingly based on your schema)
+  const contentResult = await pool.query("SELECT * FROM content WHERE user_id = $1", [userId]);
+  let contentList = contentResult.rows;
+
+  res.render("profile_page", { playlists, contentList });
+});
   
 
     
@@ -394,6 +393,20 @@ app.get("/watch_history", (req, res) => {
     });
   })
 })
+app.post("/create_playlist", async (req, res) => {
+  try {
+    const userId = req.cookies.UserID;
+    const playlistTitle = req.body.playlistTitle;
+
+    pool.query("INSERT INTO playlists (user_id, title, content_ids) VALUES ($1, $2, $3) RETURNING *",
+      [userId, playlistTitle, []]);
+
+    res.redirect("/profile_page");
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("Internal Server Error");
+  }
+});
 
 pool.connect().then(() => {
     pool.query("SELECT * FROM content").then(result => {
