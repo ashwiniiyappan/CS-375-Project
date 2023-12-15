@@ -6,9 +6,9 @@
     <body>
         <% if (watchHistory !== null) { %>
             <ul>
-            <% for (let count = 0; count < watchHistory.length; count++) { %> 
-                <li><%= watchHistory[count] %></li>
-                <a href="/content_view?content_id=<%=watchHistory[count] %>">
+            <% for (let contentId in watchHistory) { %> 
+                <li><%= watchHistory[contentId] %></li>
+                <a href="/content_view?content_id=<%=watchHistory[contentId] %>">
                     <button id = "content_link">View Page</button>
                 </a>
             </ul>

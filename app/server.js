@@ -388,9 +388,16 @@ app.post("/search", (req, res) => {
 })
 
 app.get("/watch_history", (req, res) => {
+  let watchHistory = {};
   pool.query("SELECT watch_history_ids FROM users WHERE user_id = $1", [req.cookies.UserID])
-  .then((result) => {
-    watchHistory = result.rows[0].watch_history_ids;
+  .then(async (result) => {
+    watchHistoryIds = result.rows[0].watch_history_ids;
+    for (let count = 0; count < watchHistoryIds.length; count++) {
+      await pool.query("SELECT title FROM content WHERE content_id = $1", [watchHistoryIds[count]])
+      .then((result) => {
+        watchHistory[watchHistoryIds[count]] = result.rows[0].title;
+      })
+    }
     res.render("watch_history", {
       testUser,
       watchHistory
