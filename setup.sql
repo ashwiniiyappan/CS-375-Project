@@ -28,5 +28,6 @@ disliked BOOLEAN
 CREATE TABLE playlists (
 	playlist_id SERIAL PRIMARY KEY,
 	user_id INT,
-	content_ids INT[]
+	content_ids INT[],
+	title VARCHAR(255)
 );
